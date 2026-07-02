@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-06-30 00:27:59.476513",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "branch",
+  "date",
+  "cash_sales",
+  "products_sold",
+  "new_debts",
+  "expenses",
+  "debt_payments",
+  "net_profit",
+  "total_product_sales",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Branch",
+   "options": "Branch1",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "cash_sales",
+   "fieldtype": "Currency",
+   "label": "Cash Sales"
+  },
+  {
+   "fieldname": "products_sold",
+   "fieldtype": "Table",
+   "label": "Products Sold",
+   "options": "Daily Sales Item"
+  },
+  {
+   "fieldname": "new_debts",
+   "fieldtype": "Table",
+   "label": "New Debts",
+   "options": "Daily Debt"
+  },
+  {
+   "fieldname": "expenses",
+   "fieldtype": "Table",
+   "label": "Expenses",
+   "options": "Daily Expense"
+  },
+  {
+   "fieldname": "debt_payments",
+   "fieldtype": "Table",
+   "label": "Debt Payments",
+   "options": "Daily Debt Payment"
+  },
+  {
+   "fieldname": "net_profit",
+   "fieldtype": "Currency",
+   "label": "Net Profit"
+  },
+  {
+   "fieldname": "total_product_sales",
+   "fieldtype": "Currency",
+   "label": "Total Product Sales"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Daily Store Journal",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-01 03:02:13.530692",
+ "modified_by": "Administrator",
+ "module": "Sales",
+ "name": "Daily Store Journal",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

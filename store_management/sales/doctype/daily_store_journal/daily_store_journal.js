@@ -1,0 +1,8 @@
+// Copyright (c) 2026, mazen and contributors
+// For license information, please see license.txt
+
+// frappe.ui.form.on("Daily Store Journal", {
+// 	refresh(frm) {
+
+// 	},
+// });
