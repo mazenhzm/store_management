@@ -102,6 +102,22 @@ class DailyStoreJournal(Document):
                 current_debt = frappe.db.get_value("Customer", payment.customer, "total_debt") or 0.0
                 frappe.db.set_value("Customer", payment.customer, "total_debt", current_debt - flt(payment.amount))
 
+            # 1. جلب السيولة النقدية الحالية للفرع من جدول الفروع
+        current_cash = frappe.db.get_value("Branch1", self.branch, "current_cash_balance") or 0.0
+        
+        # 2. جلب إجمالي الديون الجديدة للعملاء في هذا اليوم من الجدول الفرعي (new_debts)
+        total_customer_debts = sum(flt(d.amount) for d in self.new_debts)
+        
+        # 3. حساب الداخل (الإيرادات) بناءً على طلبك المحدد:
+        # (مبيعات كاش + الربح الصافي بعد خصم المصروفات + الديون التي عند العملاء)
+        total_inflow = flt(self.cash_sales) + flt(self.net_profit) + total_customer_debts
+        
+        # 4. تحديث السيولة النقدية الجديدة في الفرع (إضافة الداخل إلى الرصيد السابق)
+        new_cash_balance = current_cash + total_inflow
+        
+        # حفظ القيمة الجديدة مباشرة في قاعدة البيانات للفرع
+        frappe.db.set_value("Branch1", self.branch, "current_cash_balance", new_cash_balance)        
+
     def on_cancel(self):
         """
         يتم تنفيذ هذا الحدث عند إلغاء المستند.

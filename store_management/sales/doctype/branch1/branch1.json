@@ -8,7 +8,9 @@
  "engine": "InnoDB",
  "field_order": [
   "branch_name",
-  "stock_balance"
+  "stock_balance",
+  "initial_capital",
+  "current_cash_balance"
  ],
  "fields": [
   {
@@ -22,12 +24,22 @@
    "fieldtype": "Table",
    "label": "stock balance",
    "options": "Branch Stock Item"
+  },
+  {
+   "fieldname": "initial_capital",
+   "fieldtype": "Currency",
+   "label": "initial capital"
+  },
+  {
+   "fieldname": "current_cash_balance",
+   "fieldtype": "Currency",
+   "label": "current cash balance"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-01 01:08:37.047641",
+ "modified": "2026-07-04 01:49:04.706121",
  "modified_by": "Administrator",
  "module": "Sales",
  "name": "Branch1",
