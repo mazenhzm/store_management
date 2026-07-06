@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 import frappe
 from frappe import _
+from frappe.utils import flt
 
 def execute(filters=None):
 	columns = get_columns()
 	data = get_data(filters)
+	
+	# حساب صف الإجمالي إذا كانت هناك بيانات متوفرة
+	if data:
+		total_row = calculate_totals(data)
+		data.append(total_row)
+		
 	return columns, data
 
 def get_columns():
@@ -21,12 +28,10 @@ def get_columns():
 	]
 	
 def get_data(filters):
-	# بناء الشروط بناءً على الفلاتر المدخلة
 	conditions = "WHERE docstatus in (0, 1) AND date >= %(from_date)s AND date <= %(to_date)s"
 	if filters.get("branch"):
 		conditions += " AND branch = %(branch)s"
 
-	# تم تصحيح j.total_product_s إلى j.total_product_sales ليطابق قاعدة البيانات تماماً
 	query = f"""
 		SELECT 
 			j.name,
@@ -44,5 +49,32 @@ def get_data(filters):
 		ORDER BY 
 			j.date DESC
 	"""
-	
 	return frappe.db.sql(query, filters, as_dict=True)
+
+def calculate_totals(data):
+	# دالة ذكية للمرور على كل السطور وجمع القيم المالية لكل عمود بشكل منفصل
+	total_cash_sales = 0.0
+	total_product_sales = 0.0
+	total_expenses = 0.0
+	total_debts = 0.0
+	total_payments = 0.0
+	total_net_profit = 0.0
+	
+	for row in data:
+		total_cash_sales += flt(row.get("cash_sales"))
+		total_product_sales += flt(row.get("total_product_sales"))
+		total_expenses += flt(row.get("total_expenses"))
+		total_debts += flt(row.get("total_debts"))
+		total_payments += flt(row.get("total_payments"))
+		total_net_profit += flt(row.get("net_profit"))
+		
+	# إرجاع قاموس يمثل السطر الأخير ويحتوي على كلمة "الإجمالي" والمجاميع
+	return {
+		"date": _("Total / الإجمالي"),
+		"cash_sales": total_cash_sales,
+		"total_product_sales": total_product_sales,
+		"total_expenses": total_expenses,
+		"total_debts": total_debts,
+		"total_payments": total_payments,
+		"net_profit": total_net_profit
+	}

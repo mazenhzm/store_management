@@ -4,6 +4,7 @@ app_publisher = "mazen"
 app_description = "Mini System"
 app_email = "mazen@gmail.com"
 app_license = "mit"
+has_workspace = 1
 
 # Apps
 # ------------------

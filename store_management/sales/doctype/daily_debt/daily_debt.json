@@ -16,21 +16,19 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
+   "options": "Customer"
   },
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
-   "label": "Amount",
-   "reqd": 1
+   "label": "Amount"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-06-30 01:16:30.409545",
+ "modified": "2026-07-06 02:44:56.174080",
  "modified_by": "Administrator",
  "module": "Sales",
  "name": "Daily Debt",

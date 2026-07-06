@@ -110,7 +110,7 @@ class DailyStoreJournal(Document):
         
         # 3. حساب الداخل (الإيرادات) بناءً على طلبك المحدد:
         # (مبيعات كاش + الربح الصافي بعد خصم المصروفات + الديون التي عند العملاء)
-        total_inflow = flt(self.cash_sales) + flt(self.net_profit) + total_customer_debts
+        total_inflow = flt(self.cash_sales) + total_customer_debts
         
         # 4. تحديث السيولة النقدية الجديدة في الفرع (إضافة الداخل إلى الرصيد السابق)
         new_cash_balance = current_cash + total_inflow

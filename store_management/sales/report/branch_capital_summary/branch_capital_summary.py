@@ -7,11 +7,11 @@ def execute(filters=None):
 	columns = [
 		{"label": _("Branch"), "fieldname": "branch", "fieldtype": "Link", "options": "Branch1", "width": 140},
 		{"label": _("Initial Capital"), "fieldname": "initial_capital", "fieldtype": "Currency", "width": 130},
-		{"label": _("Available Cash (السيولة)"), "fieldname": "current_cash", "fieldtype": "Currency", "width": 140},
-		{"label": _("Stock Value (قيمة المخزون)"), "fieldname": "stock_value", "fieldtype": "Currency", "width": 150},
-		{"label": _("Customer Debts (ديون العملاء)"), "fieldname": "customer_debts", "fieldtype": "Currency", "width": 150},
-		{"label": _("Total Capital (رأس المال الحالي)"), "fieldname": "total_capital", "fieldtype": "Currency", "width": 160},
-		{"label": _("Net Growth (صافي النمو)"), "fieldname": "net_growth", "fieldtype": "Currency", "width": 130}
+		{"label": _("(السيولة)"), "fieldname": "current_cash", "fieldtype": "Currency", "width": 140},
+		{"label": _("(قيمة المخزون)"), "fieldname": "stock_value", "fieldtype": "Currency", "width": 150},
+		{"label": _("(ديون العملاء)"), "fieldname": "customer_debts", "fieldtype": "Currency", "width": 150},
+		{"label": _("(رأس المال الحالي)"), "fieldname": "total_capital", "fieldtype": "Currency", "width": 160},
+		{"label": _("(صافي النمو)"), "fieldname": "net_growth", "fieldtype": "Currency", "width": 130}
 	]
 	
 	data = []

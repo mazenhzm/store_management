@@ -1,20 +1,20 @@
 {
  "app": "store_management",
  "charts": [],
- "content": "[{\"id\":\"RqdLLSwtzo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the financial_store_dashboard workspace</span>\",\"col\":12}},{\"id\":\"OmYtq1YlZy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u0631\u0623\u0633 \u0627\u0644\u0645\u0627\u0644\",\"col\":3}},{\"id\":\"dqeu3EdJBH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expenses\",\"col\":3}},{\"id\":\"w5il4HjF_-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Debt\",\"col\":3}},{\"id\":\"3GOUPM0d6-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Summary\",\"col\":3}},{\"id\":\"ddGP5nixf4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Branch Stock Report\",\"col\":3}},{\"id\":\"hZZYtdJskU\",\"type\":\"paragraph\",\"data\":{\"text\":\"Click on \\n\\t\\t\\t\\n\\t\\t\\t\\n\\t\\t to edit\",\"col\":12}},{\"id\":\"7JrBfrEvHb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Count\",\"col\":3}},{\"id\":\"2OAyylPS04\",\"type\":\"paragraph\",\"data\":{\"text\":\"Stock Reoprt\",\"col\":12}},{\"id\":\"MlKoqBA6x7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buying\",\"col\":3}},{\"id\":\"z_dMKJsHg3\",\"type\":\"paragraph\",\"data\":{\"text\":\"add\",\"col\":12}},{\"id\":\"Dv7vrZQrUn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Product\",\"col\":3}},{\"id\":\"I2q9ptSHLm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Branch\",\"col\":3}}]",
+ "content": "[{\"id\":\"RqdLLSwtzo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the financial_store_dashboard workspace</span>\",\"col\":12}},{\"id\":\"Hwe9wdJV0v\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u0631\u0627\u0633 \u0627\u0644\u0645\u0627\u0644 \",\"col\":3}},{\"id\":\"dqeu3EdJBH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expenses\",\"col\":3}},{\"id\":\"w5il4HjF_-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Debt\",\"col\":3}},{\"id\":\"3GOUPM0d6-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Summary\",\"col\":3}},{\"id\":\"ddGP5nixf4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Branch Stock Report\",\"col\":3}},{\"id\":\"hZZYtdJskU\",\"type\":\"paragraph\",\"data\":{\"text\":\"Click on \\n\\t\\t\\t\\n\\t\\t\\t\\n\\t\\t to edit\",\"col\":12}},{\"id\":\"7JrBfrEvHb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Count\",\"col\":3}},{\"id\":\"2OAyylPS04\",\"type\":\"paragraph\",\"data\":{\"text\":\"Stock Reoprt\",\"col\":12}},{\"id\":\"MlKoqBA6x7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buying\",\"col\":3}},{\"id\":\"z_dMKJsHg3\",\"type\":\"paragraph\",\"data\":{\"text\":\"add\",\"col\":12}},{\"id\":\"Dv7vrZQrUn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Product\",\"col\":3}},{\"id\":\"I2q9ptSHLm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Branch\",\"col\":3}}]",
  "creation": "2026-06-28 12:00:00",
  "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "hide_custom": 0,
- "icon": "loader",
+ "icon": "bank",
  "idx": 0,
  "is_hidden": 0,
  "label": "Financial Store Dashboard",
  "links": [],
- "modified": "2026-07-04 02:59:39.478502",
+ "modified": "2026-07-06 03:31:21.657708",
  "modified_by": "Administrator",
- "module": "Mini ERP",
+ "module": "Sales",
  "name": "Financial Store Dashboard",
  "number_cards": [],
  "owner": "Administrator",
@@ -24,14 +24,6 @@
  "roles": [],
  "sequence_id": 1.0,
  "shortcuts": [
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "\u0631\u0623\u0633 \u0627\u0644\u0645\u0627\u0644",
-   "link_to": "Branch Capital Summary",
-   "report_ref_doctype": "Branch1",
-   "type": "Report"
-  },
   {
    "color": "Grey",
    "doc_view": "List",
@@ -79,6 +71,14 @@
    "link_to": "Daily Store Journal",
    "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u0631\u0627\u0633 \u0627\u0644\u0645\u0627\u0644 ",
+   "link_to": "Branch Capital Summary",
+   "report_ref_doctype": "Branch1",
+   "type": "Report"
   },
   {
    "color": "Grey",
