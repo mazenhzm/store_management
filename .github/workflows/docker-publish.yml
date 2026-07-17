@@ -1,0 +1,29 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main # أو اسم الفرع الذي ترفع عليه كودك
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: mazennn22
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./images/bench/Dockerfile
+        push: true
+        tags: |
+          mazennn22/poultry-manager:latest
