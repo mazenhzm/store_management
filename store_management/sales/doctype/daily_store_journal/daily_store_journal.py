@@ -50,30 +50,34 @@ class DailyStoreJournal(Document):
         # 1. حساب إجمالي المصروفات أولاً
         total_expenses = sum(flt(exp.amount) for exp in self.expenses)
 
-        # 2. حساب ربح المنتجات بناءً على آخر سعر شراء من جدول التغذية
+            # 2. حساب ربح المنتجات بناءً على متوسط سعر الشراء (Valuation Rate) من مخزن الفرع
         product_profit = 0.0
-        for item in self.products_sold: # تأكد من اسم جدول المبيعات الفرعي لديك (مثلاً products)
-            if item.product:
-                # استعلام لجلب سعر الشراء من آخر عملية تغذية معتمدة لهذا المنتج
-                last_purchase_price = frappe.db.sql("""
-                    SELECT child.purchase_price 
-                    FROM `tabStock Intake Detail` child
-                    JOIN `tabStock Intake` parent ON child.parent = parent.name
-                    WHERE child.product = %s AND parent.docstatus = 1
-                    ORDER BY parent.date DESC, parent.creation DESC
-                    LIMIT 1
-                """, item.product)
-                
-                # إذا وجدنا سعر شراء سابق نأخذه، وإلا نعتبره 0.0 كحالة احتياطية
-                purchase_rate = flt(last_purchase_price[0][0]) if last_purchase_price else 0.0
-                
-                # ربح القطعة الواحدة = سعر البيع الحالي - سعر آخر شراء
-                item_profit = flt(item.rate) - purchase_rate
-                
-                # إجمالي ربح المنتج = ربح القطعة * الكمية المباعة
-                product_profit += (item_profit * flt(item.qty))
 
-        # 3. صافي الربح الحقيقي لليوم = ربح المنتجات - المصروفات
+        for item in self.products_sold:
+            if not item.product:
+                continue
+                
+            # جلب متوسط سعر الشراء الحالي للمنتج مباشرة من جدول مخزن الفرع الحالي (self.branch)
+            # نستخدم frappe.db.get_value للحفاظ على كود نظيف وسريع وقراءة حقل valuation_rate مباشرة
+            purchase_rate = frappe.db.get_value(
+                "Branch Stock Item", # اسم الـ Doctype الفرعي للمخزن
+                {
+                    "product": item.product,
+                    "parent": self.branch # جلب التكلفة الخاصة بهذا الفرع تحديداً لمنع تداخل الحسابات
+                },
+                "valuation_rate"
+            )
+            
+            # تحويل القيمة إلى Float، وإذا لم توجد بضاعة مسبقة نضع 0.0 كحالة احتياطية
+            purchase_rate = flt(purchase_rate) if purchase_rate else 0.0
+            
+            # ربح القطعة الواحدة = سعر البيع الحالي - متوسط سعر الشراء المرجح
+            item_profit = flt(item.rate) - purchase_rate
+            
+            # إجمالي ربح المنتج = ربح القطعة * الكمية المباعة
+            product_profit += (item_profit * flt(item.qty))
+
+        # 3. صافي الربح الحقيقي = ربح المنتجات - المصروفات
         self.net_profit = product_profit - total_expenses
 
     def on_submit(self):

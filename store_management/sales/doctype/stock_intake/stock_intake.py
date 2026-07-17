@@ -16,53 +16,40 @@ class StockIntake(Document):
         # 1. جلب مستند الفرع المراد تغذيته
         branch_doc = frappe.get_doc("Branch1", self.branch)
         
-        # 2. المرور على المنتجات الموردة في الجدول الفرعي
         for item in self.intake_items:
             found = False
             
-            # البحث إذا كان المنتج موجوداً مسبقاً في مخزن الفرع لزيادة كميته
+            incoming_qty = flt(item.qty)
+            incoming_price = flt(item.purchase_price) # سعر الشراء الحقيقي من المورد
+            
+            # البحث في مخزن الفرع لتحديث الكمية ومتوسط التكلفة
             for row in branch_doc.stock_balance:
                 if row.product == item.product:
-                    row.available_qty = flt(row.available_qty) + flt(item.qty)
+                    current_qty = flt(row.available_qty)
+                    # جلب متوسط السعر الحالي المخزن في حقل التقييم (valuation_rate)
+                    current_valuation = flt(row.valuation_rate) 
+                    
+                    # معادلة المتوسط المرجح المتحرك (Moving Average) بدقة متناهية
+                    new_qty = current_qty + incoming_qty
+                    if new_qty > 0:
+                        new_valuation = ((current_qty * current_valuation) + (incoming_qty * incoming_price)) / new_qty
+                    else:
+                        new_valuation = incoming_price
+                    
+                    # تحديث البيانات المخزنية في سطر واحد نظيف
+                    row.available_qty = new_qty
+                    row.valuation_rate = new_valuation
+                    
                     found = True
                     break
-            
-            # إذا كان المنتج جديداً ولم يدخل مخزن هذا الفرع من قبل، يتم إضافته كسطر جديد
+                    
             if not found:
+                # أول دخول للمنتج في هذا المخزن
                 branch_doc.append("stock_balance", {
                     "product": item.product,
-                    "available_qty": item.qty
+                    "available_qty": incoming_qty,
+                    "valuation_rate": incoming_price # التكلفة الأولى هي سعر الشراء الأول
                 })
-                
-        # 3. حفظ تحديثات المخزن داخل الفرع
-        branch_doc.save(ignore_permissions=True)
-        
-        # 4. الحساب الدقيق لإجمالي المشتريات (الكمية × سعر الشراء الحقيقي) لضمان عدم الاعتماد على حقل الإجمالي بالواجهة
-        total_purchase_amount = sum(flt(item.qty) * flt(item.purchase_price) for item in self.intake_items)
-        
-        if total_purchase_amount > 0:
-            # جلب السيولة النقدية الحالية للفرع
-            current_cash = frappe.db.get_value("Branch1", self.branch, "current_cash_balance") or 0.0
-            
-            # تحقق مما إذا كان هناك سيولة كافية للشراء (اختياري)
-            if current_cash < total_purchase_amount:
-                frappe.msgprint(_("تنبيه: قيمة المشتريات تتجاوز السيولة النقدية الحالية للفرع!"))
-            
-            # تحديث سيولة الفرع بالنقصان
-            new_cash_balance = current_cash - total_purchase_amount
-            frappe.db.set_value("Branch1", self.branch, "current_cash_balance", new_cash_balance)
-
-    def on_cancel(self):
-        """
-        في حال إلغاء فاتورة التغذية: يتم خصم الكميات وعكس الحركة المالية لإرجاع الكاش.
-        """
-        branch_doc = frappe.get_doc("Branch1", self.branch)
-        
-        for item in self.intake_items:
-            for row in branch_doc.stock_balance:
-                if row.product == item.product:
-                    row.available_qty = flt(row.available_qty) - flt(item.qty)
-                    break
                     
         branch_doc.save(ignore_permissions=True)
         
