@@ -2,13 +2,15 @@ FROM mazennn22/poultry-manager:latest
 
 USER frappe
 
-# 1. الدخول إلى المجلد الصحيح للـ bench داخل الحاوية الأساسية
+# 1. إنشاء المجلد الفعلي للتطبيق داخل مسار تطبيقات فرابي بدقة
+WORKDIR /home/frappe/frappe-bench/apps/store_management
+
+# 2. نسخ كود تطبيقك الحالي بالكامل مباشرة إلى داخل هذا المجلد
+COPY --chown=frappe:frappe . .
+
+# 3. العودة لمجلد الـ bench الرئيسي لتسجيل وبناء التطبيق
 WORKDIR /home/frappe/frappe-bench
 
-# 2. نسخ كود تطبيقك الحالي إلى مجلد فرعي مؤقت لتفادي أي تعارض أثناء البناء
-COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/store_management_tmp
-
-# 3. تشغيل الأمر السحري الذي يأمر فرابي بتثبيت التطبيق محلياً من المجلد المؤقت وبنائه
-RUN bench link-extension store_management_tmp && \
-    bench setup-apps store_management && \
+# 4. إضافة اسم التطبيق لملف السجل الخاص بفرابي يدوياً، ثم بناء الأصول (Assets)
+RUN echo "store_management" >> sites/apps.txt && \
     bench build --app store_management
