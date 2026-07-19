@@ -16,32 +16,30 @@ def execute(filters=None):
     
     data = []
     
-    # 1. جلب الفروع مع سحب الجدول الابن الخاص بالمخزون تلقائياً لكل فرع
-    # ملاحظة: استبدل "branch_stock_items" بالاسم البرمجي للحقل (Table Field Name) الموجود داخل Branch1 إن كان مختلفاً
+    # 1. جلب الفروع الأساسية
     branches = frappe.get_all(
         "Branch1", 
         fields=["name", "initial_capital", "current_cash_balance"]
     )
     
-    # 2. جلب قائمة المنتجات لعمل الـ For Loop عليها كما طلبت تماماً لإظهار كل المنتجات
+    # 2. جلب قائمة المنتجات لعمل الـ For Loop عليها لإظهار كافة المنتجات
     products = frappe.get_all("Product", fields=["name"])
 
     # الحلقة الأساسية لكل فرع
     for b in branches:
         stock_value = 0.0
         
-        # جلب سجلات الجدول الابن المخزنية التابعة لهذا الفرع تحديداً من قاعدة البيانات
-        # اسم الحقل الأب في الجداول الأبناء يكون دائماً parent
+        # جلب سجلات الجدول الابن (Branch Stock Item) التابعة للفرع الحالي
         child_items = frappe.get_all(
             "Branch Stock Item",
             filters={"parent": b.name},
             fields=["product", "available_qty", "valuation_rate"]
         )
         
-        # تحويل محتويات الجدول الابن للفرع إلى قاموس سريع للبحث بداخل الذاكرة
+        # تحويل محتويات الجدول الابن إلى قاموس للبحث السريع في الذاكرة
         stock_map = {item.product: item for item in child_items}
         
-        # 3. عمل For Loop على كل المنتجات وحساب قيمتها لـ رأس المال
+        # 3. عمل For Loop على كل المنتجات وحساب إجمالي قيمة المخزون الحالي للفرع
         for p in products:
             product_entry = stock_map.get(p.name)
             
@@ -67,8 +65,12 @@ def execute(filters=None):
         total_received = flt(debts_result[0].received) if debts_result else 0.0
         customer_debts = total_given - total_received
 
-        # 5. العمليات الحسابية الختامية المتوافقة مع واجهة تقريرك المرفق
-        cash = flt(b.current_cash_balance)
+        # 5. التعديل المطلوب: خصم قيمة المخزون من الرصيد الدفتري للسيولة
+        # السيولة الفعلية = رصيد الكاش في الفرع - قيمة البضاعة التي تم شراؤها وتخزينها
+        cash = flt(b.current_cash_balance) - stock_value
+        
+        # 6. العمليات الحسابية الختامية لرأس المال
+        # رأس المال الحالي = السيولة المتبقية + قيمة المخزون + ديون العملاء
         total_capital = cash + stock_value + customer_debts
         initial = flt(b.initial_capital)
         net_growth = total_capital - initial
@@ -76,7 +78,7 @@ def execute(filters=None):
         data.append({
             "branch": b.name,
             "initial_capital": initial,
-            "current_cash": cash,
+            "current_cash": cash,  # ستظهر هنا القيمة الصافية بعد الخصم
             "stock_value": stock_value,
             "customer_debts": customer_debts,
             "total_capital": total_capital,
